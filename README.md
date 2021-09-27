@@ -1,7 +1,7 @@
 # 2021-2-02
 Repositorio 2021-1 Equipo Ceed Oz del curso Métodos formales
 
-Integrantes:
+# Integrantes:
 
 David Esteban Forero Espinosa
 
