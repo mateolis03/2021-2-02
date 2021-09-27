@@ -1,0 +1,100 @@
+html {
+  height: 100vh;
+}
+body{
+  background: linear-gradient(215deg, #556269,#3ba199, #1df098);
+  height: 100%;
+  margin: 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+h1{
+  color: white;
+  background: linear-gradient(40deg, #ca8b16, #4fa892);
+  margin: 0;
+  padding-left: 15px;
+  padding-bottom: 5px;
+}
+nav{
+  display: inline-block;
+  color: white;
+  width: 20%;
+  height: 550px;
+  background-color: black;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+li{
+  padding:20px;
+}
+li:hover{
+  background-color: #e0a83e;
+  cursor: pointer;
+}
+
+li:active{
+  background-color: #d69317;
+  cursor: pointer;
+}
+a {
+  display: block;
+  color: white;
+  text-decoration: none;
+}
+
+li a:visited{
+  color: white;
+}
+
+p{
+  display: inline-block;
+  font-weight: lighter;
+  font-size: 20px;
+}
+
+#contentManager{
+  padding: 20px;
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+#container{
+  text-align: center;
+  position: absolute;
+  display: inline-block;
+  height: 540px;
+  width: 37%;
+  margin-left: 30px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background-color: rgba(30, 33, 32, 0.68);
+}
+
+#profilePic{
+  background: rgb(36, 226, 217);
+  border-radius: 50%;
+  width: 170px;
+  margin: auto;
+  height: 160px;
+}
+
+.submit{
+  height: 40px;
+  width: 40%;
+  margin: auto;
+  display: block;
+  background-color: #10c96d;
+  border-style: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+.submit:hover{
+  cursor: pointer;
+}
