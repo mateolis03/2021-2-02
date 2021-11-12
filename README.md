@@ -9,6 +9,6 @@ Camilo Andrés Rodríguez Medina
 
 Juan Mateo de la Hoz Saavedra
 
-Diego Anrés Contreras Pérez
+Diego Andrés Contreras Pérez
 
 Edwin Alejandro Forero Gómez
