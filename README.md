@@ -1,5 +1,5 @@
 # 2021-2-02
-Repositorio 2021-1 Equipo Ceed Oz del curso Métodos formales
+Repositorio 2021-2 Equipo Ceed Oz del curso Métodos formales
 
 # Integrantes:
 
