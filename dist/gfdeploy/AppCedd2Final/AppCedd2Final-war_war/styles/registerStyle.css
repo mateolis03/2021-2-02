@@ -1,0 +1,87 @@
+html {
+    height: 100vh;
+}
+
+body{
+    background: linear-gradient(215deg, #556269,#3ba199, #1df098);
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+nav{
+    font-weight: bolder;
+    font-size: 20px;
+    height: 30px;
+    padding: 20px;
+    color: white;
+    background-color: rgb(52, 55, 56);
+}
+
+a{
+    position:absolute;
+}
+a:hover{
+    cursor: pointer;
+    font-size: 21px;
+    text-decoration: dotted underline;
+}
+
+#formContainer{
+    background-color: rgba(30, 33, 32, 0.68);
+    color: white;
+    margin: 50px auto;
+    width: 300px;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1{
+    color: #42d1c5;
+    font-size: 35px;
+}
+
+input{
+    width: 95%;
+    background-color: rgba(113, 204, 189, 0.68);
+    height: 20px;
+    margin-top: 10px;
+    border-radius: 3px;
+    border-style: none;
+}
+
+.regButton{
+    height: 40px;
+    width: 40%;
+    margin: auto;
+    display: block;
+    background-color: #10c96d;
+    border-style: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.regButton:hover{
+    cursor: pointer;
+}
+a{
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+    color: #42d1c5;
+}
+
+footer{
+    padding-bottom: 20px;
+    font-size: 25px;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    bottom: 0;
+    color: white;
+}
