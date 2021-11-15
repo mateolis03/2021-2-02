@@ -47,8 +47,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Pedidos.findByDepartamentoDestinatario", query = "SELECT p FROM Pedidos p WHERE p.departamentoDestinatario = :departamentoDestinatario")
     , @NamedQuery(name = "Pedidos.findByDireccionDestinatario", query = "SELECT p FROM Pedidos p WHERE p.direccionDestinatario = :direccionDestinatario")
     , @NamedQuery(name = "Pedidos.findByUltimoEstado", query = "SELECT p FROM Pedidos p WHERE p.ultimoEstado = :ultimoEstado")
-    , @NamedQuery(name = "Pedidos.findByUltimaFecha", query = "SELECT p FROM Pedidos p WHERE p.ultimaFecha = :ultimaFecha")
-    , @NamedQuery(name = "Pedidos.findByTotalPagar", query = "SELECT p FROM Pedidos p WHERE p.totalPagar = :totalPagar")})
+    , @NamedQuery(name = "Pedidos.findByTotalPagar", query = "SELECT p FROM Pedidos p WHERE p.totalPagar = :totalPagar")
+    , @NamedQuery(name = "Pedidos.findByUltimaFecha", query = "SELECT p FROM Pedidos p WHERE p.ultimaFecha = :ultimaFecha")})
 public class Pedidos implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -87,11 +87,11 @@ public class Pedidos implements Serializable {
     @Size(max = 15)
     @Column(name = "ULTIMO_ESTADO")
     private String ultimoEstado;
-    @Column(name = "ULTIMA_FECHA")
-    @Temporal(TemporalType.DATE)
-    private Date ultimaFecha;
     @Column(name = "TOTAL_PAGAR")
     private Double totalPagar;
+    @Column(name = "ULTIMA_FECHA")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date ultimaFecha;
     @ManyToMany(mappedBy = "pedidosCollection")
     private Collection<Cliente> clienteCollection;
     @ManyToMany(mappedBy = "pedidosCollection")
@@ -100,6 +100,10 @@ public class Pedidos implements Serializable {
     private Collection<Registro> registroCollection;
 
     public Pedidos() {
+    }
+
+    public Pedidos(Long pedidoid) {
+        this.pedidoid = pedidoid;
     }
 
     public Pedidos(Long pedidoid, String tipo, Double alto, Double ancho, Double profundidad, Double peso, String nombreDestinatario, String telefonoDestinatario, String ciudadDestinatario, String departamentoDestinatario, String direccionDestinatario, String ultimoEstado, Date ultimaFecha, Double totalPagar) {
@@ -115,16 +119,13 @@ public class Pedidos implements Serializable {
         this.departamentoDestinatario = departamentoDestinatario;
         this.direccionDestinatario = direccionDestinatario;
         this.ultimoEstado = ultimoEstado;
-        this.ultimaFecha = ultimaFecha;
         this.totalPagar = totalPagar;
+        this.ultimaFecha = ultimaFecha;
         this.registroCollection = new ArrayList();
+        
     }
     
     
-
-    public Pedidos(Long pedidoid) {
-        this.pedidoid = pedidoid;
-    }
 
     public Long getPedidoid() {
         return pedidoid;
@@ -222,20 +223,20 @@ public class Pedidos implements Serializable {
         this.ultimoEstado = ultimoEstado;
     }
 
-    public Date getUltimaFecha() {
-        return ultimaFecha;
-    }
-
-    public void setUltimaFecha(Date ultimaFecha) {
-        this.ultimaFecha = ultimaFecha;
-    }
-
     public Double getTotalPagar() {
         return totalPagar;
     }
 
     public void setTotalPagar(Double totalPagar) {
         this.totalPagar = totalPagar;
+    }
+
+    public Date getUltimaFecha() {
+        return ultimaFecha;
+    }
+
+    public void setUltimaFecha(Date ultimaFecha) {
+        this.ultimaFecha = ultimaFecha;
     }
 
     @XmlTransient

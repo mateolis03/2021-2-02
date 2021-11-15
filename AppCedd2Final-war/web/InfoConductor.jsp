@@ -4,7 +4,7 @@
     Author     : edwin
 --%>
 
-<%@page import="co.edu.unipiloto.entities.Cliente"%>
+<%@page import="co.edu.unipiloto.entities.Conductor"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,27 +17,27 @@
               <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
               <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/profileStyle.css" />
-    <title>AGDT: Mis datos</title>
+    <title>AGDT: Mis pedidos</title>
 </head>
 
 <body>
     <%!
-            String idS, name, user, mensaje = "", email, loc, dir;
-            Cliente cliente;
+            String idS, name, user, mensaje = "", email, placa, carro;
+            Conductor conductor;
             HttpSession misession;
         %>
 
         <%
             //logH = (LogInServlet) request.getAttribute("logM");
             misession = request.getSession(true);
-            cliente = (Cliente) misession.getAttribute("clienteActual");
-            name = cliente.getNombre();
-            user = cliente.getUsuario();
+            conductor = (Conductor) misession.getAttribute("conductorActual");
+            name = conductor.getNombre();
+            user = conductor.getUsuario();
             //idS = logH.getCliente().getClienteid() + "";
-            idS = cliente.getClienteid() + "";
-            email = cliente.getEmail();
-            loc = cliente.getCiudad() + ", " + cliente.getDepartamento();
-            dir = cliente.getDireccion();
+            idS = conductor.getConductorid() + "";
+            email = conductor.getEmail();
+            carro = conductor.getModeloVehiculo();
+            placa = conductor.getPlacaVehiculo();
 
             try {
                 if (request.getAttribute("mensaje") != null) {
@@ -57,7 +57,7 @@
     <a><h1>Mi información<p>&nbsp;</p></h1></a>
     <nav>
         <ul>
-            <a href="ClienteMenu.jsp"><li>Atrás</li></a>
+            <a href="ConductorMenu.jsp"><li>Atrás</li></a>
         </ul>
     </nav>
     <div id="container">
@@ -75,11 +75,11 @@
             E-mail<br>
             <p><%=email%></p><br>
             
-            Ciudad<br>
-            <p><%=loc%></p><br>
+            Vehículo<br>
+            <p><%=carro%></p><br>
             
-            Dirección<br>
-            <p><%=dir%></p><br>
+            Placa<br>
+            <p><%=placa%></p><br>
         </div>
     </div>
 </body>

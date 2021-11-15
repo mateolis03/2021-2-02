@@ -36,7 +36,8 @@
             LogInServlet logH;
             HttpSession misessionCon;
             Objetos myObj;
-            Collection<Pedidos> pedidosAll = new ArrayList();
+            int size = 0;
+            Collection<Pedidos> arrayP = new ArrayList();
         %>
 
         <%
@@ -46,7 +47,7 @@
             name = user.getNombre();
             //idS = logH.getCliente().getClienteid() + "";
             idS = user.getConductorid() + "";
-            misessionCon.setAttribute("conductorActual", user);
+            //misessionCon.setAttribute("conductorActual", user);
 
             try {
                 if (request.getAttribute("mensaje") != null) {
@@ -57,28 +58,35 @@
             }
 
             //String usuario = request.getParameter("usuario");       
-            //pedidos = logH.getCliente().getPedidosCollection();
+            //pedidosAll = logH.getPedidosFacade().findAll();
             
             myObj = (Objetos) misessionCon.getAttribute("myObject");    
-            pedidosAll = myObj.getPedidosAll();
+            arrayP = myObj.getPedidosAll();
+            
+            size = 0;
+            for(Pedidos a: arrayP){
+                if(a.getUltimoEstado().equals("Sin Asignar")){
+                    size++;
+                }
+            }
         %>
 
-        <form action="./ConductorServlet" method="POST">
+        <form action="./AplicarSolServlet" method="POST">
 
-            <a><h1>Aplicar a solicitudes de transporte de carga<p>&nbsp;</p></h1></a>
+            <h1>Bienvenido Sr(a). <p><%= name%></p></h1>
             <nav>
                 <ul>
-                    <li><a href="ConductorMenu.jsp">Inicio</a></li>
-                    <li><a href="AplicarSolCon.jsp">Aplicar a solicitudes</a></li>
-                    <li><a href="InfoCliente.jsp">Perfil de usuario</a></li> <%-- ojo No esta creado--%>
-                    <li><a href="LogOut.jsp">Salir</a></li>
+                    <li><a href="ConductorMenu.jsp" style="text-decoration:none">Inicio</a></li>
+                    <li><a href="AplicarSolCon.jsp" style="text-decoration:none">Aplicar a Solicitudes</a></li>
+                    <li><a href="InfoCliente.jsp" style="text-decoration:none">Perfil de usuario</a></li> <%-- ojo No esta creado--%>
+                    <li><a href="./LogOutServlet" style="text-decoration:none">Cerrar Sesión</a></li>
                 </ul>
             </nav>
             <div id="container">
                 <div id="contentManager">
                     <p><%=mensaje%></p><br>
 
-                    Lista de pedidos<br>
+                    Lista de solicitudes<br>
                     <%-- 
                     <jsp:setProperty name="conMenServlet" property="name" value="<%=user%>" />
                     <jsp:setProperty name="conMenServlet" property="idS" value="<%=idS%>" />
@@ -89,10 +97,11 @@
 
                     --%>
 
+                    <p>Usted puede aplicar a <%=size%> pedido(s)</p><br>
 
-
-                    <input type="text" name="pedido" value="ID"/>
-                    <input type="submit" value="Aplicar a Solicitud" name="action" /><br>
+                    <input type="text" name="pedido" value="" placeholder="ID"/>
+                    <input type="submit" value="Ver Información Detallada" name="action" />
+                    <input type="submit" value="Aplicar a Solicitud" name="action" /><br><br>
 
                     <table border="1">
                         <th>ID</th>
@@ -101,15 +110,18 @@
                         <th>Estado</th>
                         <th>Fecha de Actualización</th>
 
-                        <c:forEach items="<%=pedidosAll%>" var="pedidis" >
-                            
+                        <c:set var = "pedidosA" scope = "application" value = "<%=arrayP%>"/>
+                        <c:forEach items="${pedidosA}" var="pedid" >
+                            <c:if test="${pedid.ultimoEstado eq "Sin Asignar"}">
                                 <tr>
-                                    <td>${pedidis.pedidoid}</td>
-                                    <td>${pedidis.tipo}</td>
-                                    <td>${pedidis.nombreDestinatario}</td>
-                                    <td>${pedidis.ultimoEstado}</td>
-                                    <td>${pedidis.ultimaFecha}</td>
+                                    <td>${pedid.pedidoid}</td>
+                                    <td>${pedid.tipo}</td>
+                                    <td>${pedid.nombreDestinatario}</td>
+                                    <td>${pedid.ultimoEstado}</td>
+                                    <td>${pedid.ultimaFecha}</td>
                                 </tr>
+                                
+                            </c:if>
                         </c:forEach> 
                     </table>
                 </div>

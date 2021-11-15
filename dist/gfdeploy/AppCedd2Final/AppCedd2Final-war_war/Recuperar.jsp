@@ -40,7 +40,7 @@
         <div>
             <form action="./RecuperarServlet" method="POST">
                 <jsp:useBean id="servletRecuperar" scope="session" class="co.edu.unipiloto.servlet.RecuperarServlet" />
-                Introduzca su correo: <input type="text" name="correo"/><br>
+                Introduzca su correo: <input type="text" name="correo" placeholder="Ej: alguien@gmail.com"/><br>
                 <input name="action" type="submit" value="Aceptar" class="login" style="margin-top: 10px"/>
                 <p><%=mensaje%></p>
                 <input name="action" type="submit" value="Volver..." class="login" style="margin-top: 40px"/>

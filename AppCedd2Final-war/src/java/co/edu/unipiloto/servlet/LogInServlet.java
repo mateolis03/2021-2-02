@@ -150,6 +150,16 @@ public class LogInServlet extends HttpServlet {
         this.cliente = cliente;
     }
 
+    public PedidosFacadeLocal getPedidosFacade() {
+        return pedidosFacade;
+    }
+
+    public void setPedidosFacade(PedidosFacadeLocal pedidosFacade) {
+        this.pedidosFacade = pedidosFacade;
+    }
+    
+    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

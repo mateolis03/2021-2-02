@@ -11,4 +11,7 @@
         <property name="driverClass" value="org.apache.derby.jdbc.ClientDriver"/>
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="java:module/Cedd2DB" object-type="user" pool-name="derby_net_Cedd2_admin123Pool"/>
+    <jdbc-resource enabled="true" jndi-name="java:module/ceddoz2f" object-type="user" pool-name="derby_net_Cedd2_admin123Pool"/>
+    <jdbc-resource enabled="true" jndi-name="java:module/COz2" object-type="user" pool-name="derby_net_Cedd2_admin123Pool"/>
+    <jdbc-resource enabled="true" jndi-name="java:module/COz2F" object-type="user" pool-name="derby_net_Cedd2_admin123Pool"/>
 </resources>

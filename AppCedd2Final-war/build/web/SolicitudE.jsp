@@ -56,29 +56,32 @@ String direccionDestinatario,
 
                 --%>
                 <jsp:useBean id="solServlet" scope="application" class="co.edu.unipiloto.servlet.SolEnvServlet" />
+                
+                <p><%=mensaje%></p><br>
+                
                 <label for="fname">Tipo paquete:</label><br>
-                <input type="text" id="fname" name="tipo"><br>
+                <input type="text" id="fname" name="tipo" placeholder="Ej: Electrodoméstico"><br>
                 <label for="lname">Alto(m):</label><br>
-                <input type="text" id="lname" name="alto" ><br>
+                <input type="text" id="lname" name="alto" placeholder="Ej: 0.5"><br>
                 <label for="lname">Ancho(m):</label><br>
-                <input type="text" id="lname" name="ancho" ><br>
+                <input type="text" id="lname" name="ancho" placeholder="Ej: 1.2"><br>
                 <label for="lname">Profundidad(m):</label><br>
-                <input type="text" id="lname" name="profundidad" ><br>	
+                <input type="text" id="lname" name="profundidad" placeholder="Ej: 1"><br>	
                 <label for="lname">Peso(g):</label><br>
-                <input type="text" id="lname" name="peso" ><br>
+                <input type="text" id="lname" name="peso" placeholder="Ej: 100.2"><br>
 
                 <label for="lname">Nombre destinatario</label><br>
                 <input type="text" id="lname" name="nombre" ><br>	
                 <label for="lname">Telefono destinatario</label><br>
-                <input type="text" id="lname" name="telefono" ><br>
+                <input type="text" id="lname" name="telefono" placeholder="Ej: 3124152314"><br>
                 <label for="lname">Ciudad destinatario</label><br>
                 <input type="text" id="lname" name="ciudad" ><br>
                 <label for="lname">Departamento destinatario</label><br>
                 <input type="text" id="lname" name="departamento" ><br>
                 <label for="lname">Direccion destinatario</label><br>
-                <input type="text" id="lname" name="direccion" ><br>	
+                <input type="text" id="lname" name="direccion" placeholder="Ej: Calle 5 # 3 - 02"><br>	
 
-                <p><%=mensaje%></p><br>
+                
 
                 <input type="submit" value="Solicitar envio">
             </form>    		

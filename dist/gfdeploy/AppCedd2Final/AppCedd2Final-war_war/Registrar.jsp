@@ -52,17 +52,17 @@ String telefono, String ciudad, String departamento, String direccion, String us
             <label for="lname">Número de documento:</label><br>
             <input type="text" id="lname" name="doc"><br><br>
             <label for="lname">Correo electrónico:</label><br>
-            <input type="text" id="lname" name="mail"><br><br>
+            <input type="text" id="lname" name="mail" placeholder="Ej: alguien@gmail.com"><br><br>
             <label for="lname">Teléfono:</label><br>
-            <input type="text" id="lname" name="telefono"><br><br>
+            <input type="text" id="lname" name="telefono" placeholder="Ej: 3124567899"><br><br>
             <label for="lname">Ciudad:</label><br>
             <input type="text" id="lname" name="ciudad"><br><br>
             <label for="lname">Departamento:</label><br>
             <input type="text" id="lname" name="departamento"><br><br>
             <label for="lname">Dirección:</label><br>
-            <input type="text" id="lname" name="direccion"><br><br>
+            <input type="text" id="lname" name="direccion" placeholder="Ej: Calle 4 # 1 - 23"><br><br>
             <label for="lname">Usuario acceso:</label><br>
-            <input type="text" id="lname" name="usuario"><br><br>
+            <input type="text" id="lname" name="usuario" placeholder="Ej: taniafg"><br><br>
             <label for="lname">Password:</label><br>
             <input type="password" id="lname" name="password"><br><br>
             <label for="lname">Confirmar Password:</label><br>

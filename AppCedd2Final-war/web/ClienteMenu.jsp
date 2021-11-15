@@ -67,15 +67,15 @@
             <jsp:useBean id="servUser" scope="application" class="co.edu.unipiloto.servlet.UsuarioServlet" />
 
 
-            <h1>Bienvenido Sr(a) <%=name%></h1>
-            <h1><%=idS%></h1>
+            <h1>Bienvenid@ Sr(a) <p><%=name%></p></h1>
+            <h1>C.C. <%=idS%></h1>
 
             <nav>
                 <ul>
-                    <li><a href="ClienteMenu.jsp">Inicio</a></li>
-                    <li><a href="SolicitudE.jsp">Solicitar envío</a></li>
-                    <li><a href="InfoCliente.jsp" id="<%=idS%>">Perfil de usuario</a></li> <%-- ojo --%>
-                    <li><a href="LogOut.jsp">Salir</a></li>
+                    <li><a href="ClienteMenu.jsp" style="text-decoration:none">Inicio</a></li>
+                    <li><a href="SolicitudE.jsp" style="text-decoration:none">Solicitar envío</a></li>
+                    <li><a href="InfoCliente.jsp" id="<%=idS%>" style="text-decoration:none">Perfil de usuario</a></li> <%-- ojo --%>
+                    <li><a href="./LogOutServlet" style="text-decoration:none">Cerrar Sesión</a></li>
                 </ul>
             </nav>
             <div id="container">
@@ -91,7 +91,7 @@
 
 
                     <input type="hidden" name="identificador" value="<%=idS%>" readonly="readonly"/>   
-                    <input type="text" name="pedido" value="ID"/> <input type="submit" value="Ver Info Detallada" name="action" /><input type="submit" value="Cancelar Solicitud" name="action" /><br>
+                    <input type="text" name="pedido" value="" placeholder="ID"/> <input type="submit" value="Ver Info Detallada" name="action" /><input type="submit" value="Cancelar Solicitud" name="action" /><br>
                     <p></p>
 
                     <table border="1">
@@ -101,13 +101,16 @@
                         <th>Fecha de actualización</th>
 
                         <c:forEach items="<%=pedidos%>" var="pedido">
-                            <c:if test="${pedido.ultimoEstado eq 'Sin Asignar'}">
-                                <tr>
-                                    <td>${pedido.pedidoid}</td>
-                                    <td>${pedido.tipo}</td>
-                                    <td>${pedido.ultimoEstado}</td>
-                                    <td>${pedido.ultimaFecha}</td>
-                                </tr>
+                            <c:if test="${pedido.ultimoEstado ne 'Cancelado'}">
+                                <c:if test="${pedido.ultimoEstado ne 'Entregado'}">
+                                    <tr>
+                                        <td>${pedido.pedidoid}</td>
+                                        <td>${pedido.tipo}</td>
+                                        <td>${pedido.ultimoEstado}</td>
+                                        <td>${pedido.ultimaFecha}</td>
+                                    </tr>
+                                </c:if>
+
                             </c:if>
                         </c:forEach> 
                     </table>

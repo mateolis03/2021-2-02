@@ -52,7 +52,7 @@ public class Registro implements Serializable {
     @Column(name = "DEPARTAMENTO")
     private String departamento;
     @Column(name = "FECHA")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     @Size(max = 50)
     @Column(name = "DESCRIPCION")
@@ -67,6 +67,10 @@ public class Registro implements Serializable {
     public Registro() {
     }
 
+    public Registro(Long registroid) {
+        this.registroid = registroid;
+    }
+
     public Registro(Long registroid, String ciudad, String departamento, Date fecha, String descripcion, String estado, Pedidos pedidoId) {
         this.registroid = registroid;
         this.ciudad = ciudad;
@@ -76,13 +80,8 @@ public class Registro implements Serializable {
         this.estado = estado;
         this.pedidoId = pedidoId;
     }
-    
-    
 
-    public Registro(Long registroid) {
-        this.registroid = registroid;
-    }
-
+    
     public Long getRegistroid() {
         return registroid;
     }

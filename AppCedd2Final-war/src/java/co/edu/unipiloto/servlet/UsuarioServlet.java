@@ -6,9 +6,11 @@
 package co.edu.unipiloto.servlet;
 
 import co.edu.unipiloto.entities.Cliente;
+import co.edu.unipiloto.entities.Conductor;
 import co.edu.unipiloto.entities.Pedidos;
 import co.edu.unipiloto.entities.Registro;
 import co.edu.unipiloto.entities.session.ClienteFacadeLocal;
+import co.edu.unipiloto.entities.session.ConductorFacadeLocal;
 import co.edu.unipiloto.entities.session.PedidosFacadeLocal;
 import co.edu.unipiloto.entities.session.RegistroFacadeLocal;
 import java.io.IOException;
@@ -29,6 +31,9 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "UsuarioServlet", urlPatterns = {"/UsuarioServlet"})
 public class UsuarioServlet extends HttpServlet {
+
+    @EJB
+    private ConductorFacadeLocal conductorFacade;
 
     @EJB
     private ClienteFacadeLocal clienteFacade;
@@ -98,7 +103,7 @@ public class UsuarioServlet extends HttpServlet {
                 out.println("<th>ID</th>");
                 out.println("<th>Tipo Pedido</th>");
                 out.println("<th>Dimensiones</th>");
-                out.println("<th>Peso</th>");
+                out.println("<th>Peso (g)</th>");
                 out.println("<th>Nombre Destinatario</th>");
                 out.println("<th>Teléfono Destinatario</th>");
                 out.println("<th>Destino</th>");
@@ -119,7 +124,7 @@ public class UsuarioServlet extends HttpServlet {
                     out.println("<td>" + x.getDireccionDestinatario() + "</td>");
                     out.println("<td>" + x.getUltimoEstado() + "</td>");
                     out.println("<td>" + x.getUltimaFecha().toString() + "</td>");
-                    out.println("<td>" + x.getTotalPagar() + "</td>");
+                    out.println("<td>$ " + x.getTotalPagar() + "</td>");
                     out.println("</tr>");
 
                 }
@@ -195,16 +200,18 @@ public class UsuarioServlet extends HttpServlet {
                     //Añadir registro a pedido
                     Collection<Registro> registrosP = pedido.getRegistroCollection();
                     registrosP.add(registro);
-                    //pedido.setRegistroCollection(registrosP);
+                    pedido.setRegistroCollection(registrosP);
                     pedido.setUltimoEstado("Cancelado");
                     pedido.setUltimaFecha(date);
+                    
+                    
 
                     //Añadir el pedido
                     pedidosFacade.edit(pedido);
 
                     //Añadir pedido a cliente
                     Collection<Pedidos> pedidosC = cliente.getPedidosCollection();
-                    pedidosC.add(pedido);
+                    //pedidosC.add(pedido);
                     cliente.setPedidosCollection(pedidosC);
 
                     clienteFacade.edit(cliente); //Agregamos el pedido
@@ -237,6 +244,25 @@ public class UsuarioServlet extends HttpServlet {
                     out.println("<h3>Costo transporte: $" + pedido.getTotalPagar() + "</h3>");
                     out.println("<h3>Estado: " + pedido.getUltimoEstado() + "</h3>");
                     out.println("<h3>Última fecha de actualización: " + pedido.getUltimaFecha().toString() + "</h3><br>");
+                    
+                    if(!(pedido.getUltimoEstado().equals("Cancelado") || pedido.getUltimoEstado().equals("Sin Asignar") )){ //Imprimir el conductor si aplica
+                        Conductor conductor = new Conductor();
+                        for(Conductor c: conductorFacade.findAll()){
+                            for(Pedidos p: c.getPedidosCollection()){
+                                if(p.getPedidoid() == idP){
+                                    conductor = c;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        out.println("<h2>Datos del conductor" + "</h2><br>");
+                        
+                        out.println("<h3>Nombre: " + conductor.getNombre() + "</h3>");
+                        out.println("<h3>Teléfono: +57 " + conductor.getTelefono() + "</h3>");
+                        out.println("<h3>Modelo del vehículo: " + conductor.getModeloVehiculo() + "</h3>");
+                        out.println("<h3>Placa del vehículo: " + conductor.getPlacaVehiculo() + "</h3><br>");
+                    }
 
                     out.println("<h2>Historial" + "</h2><br>");
 

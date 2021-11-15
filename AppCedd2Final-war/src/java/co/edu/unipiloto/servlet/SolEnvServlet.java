@@ -138,12 +138,14 @@ public class SolEnvServlet extends HttpServlet {
                 Pedidos pedido = new Pedidos(count + 1, tipo, alto, ancho, profundidad, peso, nombre, telefono, ciudad, departamento, direccion, ESTADO, fecha, totalPagar * 1.0);
 
                 count = 0;
+                
+                Cliente temp = clienteFacade.find(id);
 
                 for (Registro a : registroFacade.findAll()) {
                     count++;
                 }
 
-                Registro registro = new Registro(count + 1, ciudad, departamento, fecha, "Creación de solicitud", ESTADO, pedido);
+                Registro registro = new Registro(count + 1, temp.getCiudad(), temp.getDepartamento(), fecha, "Creación de solicitud", ESTADO, pedido);
 
                 //Añadir registro a pedido
                 Collection<Registro> registrosP = pedido.getRegistroCollection();
@@ -151,12 +153,13 @@ public class SolEnvServlet extends HttpServlet {
                 pedido.setRegistroCollection(registrosP);
 
                 //Añadir el pedido
-                pedidosFacade.create(pedido);
+                //pedidosFacade.create(pedido);
 
                 //Cambiar registrofacade
                 //registroFacade.create(registro);
+                
                 //Añadir pedido a cliente
-                Cliente temp = clienteFacade.find(id);
+                
 
                 Collection<Pedidos> pedidosC = temp.getPedidosCollection();
                 pedidosC.add(pedido);

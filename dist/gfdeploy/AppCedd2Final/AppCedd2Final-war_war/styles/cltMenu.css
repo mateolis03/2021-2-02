@@ -20,7 +20,7 @@ nav{
     display: inline-block;
     color: white;
     width: 20%;
-    height: 550px;
+    height: 961px;
     background-color: black;
 }
 ul {
@@ -30,6 +30,7 @@ ul {
 }
 li{
     padding:20px;
+    color: white;
 }
 li:hover{
     background-color: #e0a83e;
@@ -43,6 +44,7 @@ li:active{
 li a {
     display: block;
     width: 150px;
+    color: white;
 }
 
 p{
@@ -61,7 +63,7 @@ p{
 #container{
     position: absolute;
     display: inline-block;
-    height: 550px;
+    height: 100%;
     width: 80%;
     background-color: rgba(30, 33, 32, 0.68);
 }

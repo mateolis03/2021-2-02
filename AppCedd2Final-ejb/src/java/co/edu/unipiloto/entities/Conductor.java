@@ -81,6 +81,18 @@ public class Conductor implements Serializable {
 
     public Conductor() {
     }
+
+    public Conductor(Long conductorid, String nombre, BigInteger cedula, String email, String telefono, String usuario, String password, String placaVehiculo, String modeloVehiculo) {
+        this.conductorid = conductorid;
+        this.nombre = nombre;
+        this.cedula = cedula;
+        this.email = email;
+        this.telefono = telefono;
+        this.usuario = usuario;
+        this.password = password;
+        this.placaVehiculo = placaVehiculo;
+        this.modeloVehiculo = modeloVehiculo;
+    }
     
     
 

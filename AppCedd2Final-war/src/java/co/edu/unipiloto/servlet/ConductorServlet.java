@@ -9,9 +9,11 @@ import co.edu.unipiloto.entities.Cliente;
 import co.edu.unipiloto.entities.Conductor;
 import co.edu.unipiloto.entities.Pedidos;
 import co.edu.unipiloto.entities.Registro;
+import co.edu.unipiloto.entities.session.ClienteFacadeLocal;
 import co.edu.unipiloto.entities.session.ConductorFacadeLocal;
 import co.edu.unipiloto.entities.session.PedidosFacadeLocal;
 import co.edu.unipiloto.entities.session.RegistroFacadeLocal;
+import co.edu.unipiloto.utilities.Objetos;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
@@ -30,6 +32,9 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ConductorServlet", urlPatterns = {"/ConductorServlet"})
 public class ConductorServlet extends HttpServlet {
+
+    @EJB
+    private ClienteFacadeLocal clienteFacade;
 
     @EJB
     private RegistroFacadeLocal registroFacade;
@@ -81,17 +86,30 @@ public class ConductorServlet extends HttpServlet {
         String pedidoId = request.getParameter("pedido");
         String estado = request.getParameter("eleccion");
         String ciudad = request.getParameter("ciudad");
+        String comentario = request.getParameter("comentario");
         String departamento = request.getParameter("departamento");
 
+        long id;
+        boolean ok = true;
+
         HttpSession misessionCon = request.getSession(true);
-        conductor = (Conductor) misessionCon.getAttribute("clienteActual");
-        Object myObject = misessionCon.getAttribute("myObject");
+        conductor = (Conductor) misessionCon.getAttribute("conductorActual");
+        Pedidos pedido = new Pedidos();
+        Cliente cliente = new Cliente();
+
+        try {
+            id = Long.parseLong(pedidoId);
+            pedido = pedidosFacade.find(id);
+        } catch (Exception e) {
+            ok = false;
+            id = 0;
+        }
 
         if (action.equals("Mostrar historial")) {
             try (PrintWriter out = response.getWriter()) {
                 //Long pedidoid, String tipo, Double alto, Double ancho, Double profundidad, Double peso, String nombreDestinatario, String telefonoDestinatario, 
                 //String ciudadDestinatario, String departamentoDestinatario, String direccionDestinatario, String ultimoEstado, Date ultimaFecha, Double totalPagar
-                
+
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");
@@ -101,11 +119,11 @@ public class ConductorServlet extends HttpServlet {
                 out.println("<body>");
                 out.println("<h1>HISTORIAL DE SOLICITUDES " + "</h1><br>");
                 out.println("<table border=\"1\">");
-                
+
                 out.println("<th>ID</th>");
                 out.println("<th>Tipo Pedido</th>");
                 out.println("<th>Dimensiones</th>");
-                out.println("<th>Peso</th>");
+                out.println("<th>Peso (g)</th>");
                 out.println("<th>Nombre Destinatario</th>");
                 out.println("<th>Teléfono Destinatario</th>");
                 out.println("<th>Destino</th>");
@@ -128,7 +146,7 @@ public class ConductorServlet extends HttpServlet {
                     out.println("</tr>");
 
                 }
-                
+
                 out.println("</table>");
 
                 out.print("<p><a href='ConductorMenu.jsp'>Volver...</a></p>");
@@ -138,143 +156,165 @@ public class ConductorServlet extends HttpServlet {
 
                 //misession.setAttribute("clienteActual", cliente);
             }
-        } else if (pedidoId.equals("") || pedidoId.equals("ID")) {
-            mensaje = "No ha ingresado un número de guía, intente de nuevo...";
-
-            //misession.setAttribute("clienteActual", cliente);
-            request.setAttribute("mensaje", mensaje);
-            request.getRequestDispatcher("ClienteMenu.jsp").forward(request, response);
-
         } else {
-            long idP = 0;
-            boolean ok = true;
-            try {
-                idP = Long.parseLong(pedidoId);
-            } catch (Exception e) {
-                ok = false;
-            }
 
-            if (!ok) { //No se pudo parsear
-                mensaje = "Valor incorrecto, intente de nuevo...";
+            if (!ok) { //Se pudo parsear?
+                mensaje = "Dato incorrecto(ID), intente de nuevo...";
 
                 //misession.setAttribute("clienteActual", cliente);
                 request.setAttribute("mensaje", mensaje);
-                request.getRequestDispatcher("ClienteMenu.jsp").forward(request, response);
-            }
+                request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+            } else {
+                if (pedido != null && !pedido.getUltimoEstado().equals("Sin Asignar")) { //Está el pedido y no está "sin asignar"
 
-            ok = false;
-            Pedidos pedido = new Pedidos();
-            for (Pedidos a : conductor.getPedidosCollection()) {
-                if (a.getPedidoid() == idP) {
-                    pedido = a;
-                    ok = true;
-                    break;
-                }
-            }
+                    if (action.equals("Actualizar Pedido")) { //Actualizar estado pedido
+                        ok = false;
+                        for (Pedidos p : conductor.getPedidosCollection()) { //Buscamos si el pedido pertenece al conductor
+                            if (p.getPedidoid() == id) {
+                                ok = true;
+                                break;
+                            }
+                        }
 
-            if (!ok) { //No está el ID
-                mensaje = "No se encontró el número de guía(ID) en el registro, intente de nuevo...";
+                        if (!ok) {
+                            mensaje = "El pedido con ID " + id + " no lo tiene asignado, intente de nuevo...";
 
-                //misession.setAttribute("clienteActual", cliente);
-                request.setAttribute("mensaje", mensaje);
-                request.getRequestDispatcher("ClienteMenu.jsp").forward(request, response);
-            }
+                            //misession.setAttribute("clienteActual", cliente);
+                            request.setAttribute("mensaje", mensaje);
+                            request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                        } else if (pedido.getUltimoEstado().equals("Entregado") || pedido.getUltimoEstado().equals("Cancelado")) { //Si el pedido ya se entregó o canceló
+                            mensaje = "El pedido ya ha terminado por lo que su estado no puede editarse...";
 
-            if (action.equals("Actualizar")) {
-                if (pedido.getUltimoEstado().equals("Entregado") || pedido.getUltimoEstado().equals("Cancelado")) { //Si el pedido ya se entregó o canceló
-                    mensaje = "El pedido ya ha terminado por lo que su estado no puede editarse...";
+                            //misession.setAttribute("clienteActual", cliente);
+                            request.setAttribute("mensaje", mensaje);
+                            request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                        } else {//Actualizar estado
+                            //Long registroid, String ciudad, String departamento, Date fecha, String descripcion, String estado, Pedidos pedidoId
+                            if (ciudad.equals("") || departamento.equals("") || ciudad.equals("Ciudad") || departamento.equals("Departamento")) {
+                                mensaje = "Edite los campos de Cuidad y Departamento antes de continuar...";
+
+                                //misession.setAttribute("clienteActual", cliente);
+                                request.setAttribute("mensaje", mensaje);
+                                request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                            } else {
+
+                                long count = 0;
+                                for (Registro a : registroFacade.findAll()) {
+                                    count++;
+                                }
+
+                                Date date = new Date();
+                                //Long registroid, String ciudad, String departamento, Date fecha, String descripcion, Pedidos pedidoId
+                                Registro registro = new Registro(count + 1, ciudad, departamento, date, comentario.equals("") ? "Actualización del conductor" : comentario, estado, pedido); //creamos el registro
+
+                                //Añadir registro a pedido
+                                Collection<Registro> registrosP = pedido.getRegistroCollection();
+                                registrosP.add(registro);
+                                pedido.setRegistroCollection(registrosP);
+
+                                pedido.setUltimaFecha(date);
+                                pedido.setUltimoEstado(estado);
+
+                                pedidosFacade.edit(pedido); //editamos el pedido
+
+                                conductor = conductorFacade.find(conductor.getConductorid());
+
+                                mensaje = "El pedido con ID " + id + " se ha actualizado con éxito...";
+
+                                misessionCon.setAttribute("conductorActual", conductor);
+                                request.setAttribute("mensaje", mensaje);
+                                request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+
+                            }
+                        }
+
+                    } else { //Ver info
+                        ok = false;
+                        for (Pedidos p : conductor.getPedidosCollection()) { //Buscamos si el pedido pertenece al conductor
+                            if (p.getPedidoid() == id) {
+                                ok = true;
+                                break;
+                            }
+                        }
+
+                        if (!ok) {
+                            mensaje = "El pedido con ID " + id + " no lo tiene asignado, intente de nuevo...";
+
+                            //misession.setAttribute("clienteActual", cliente);
+                            request.setAttribute("mensaje", mensaje);
+                            request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                        } else {
+                            try (PrintWriter out = response.getWriter()) {
+                                /* TODO output your page here. You may use following sample code. */
+                                mensaje = "";
+                                request.setAttribute("mensaje", mensaje);
+
+                                for (Cliente a : clienteFacade.findAll()) { //Buscamos al cliente que tiene ese pedido
+                                    for (Pedidos x : a.getPedidosCollection()) {
+                                        if (x.getPedidoid() == id) {
+                                            cliente = a;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");
+                                out.println("<title>Servlet UsuarioServlet</title>");
+                                out.println("</head>");
+                                out.println("<body>");
+
+                                out.println("<h1>DETALLE DE LA SOLICITUD " + "</h1><br>");
+
+                                out.println("<h2>Información del cliente" + "</h2><br>");
+                                out.println("<h3>Nombre: " + cliente.getNombre() + "</h3>");
+                                out.println("<h3>Teléfono: +57 " + cliente.getTelefono() + "</h3>");
+                                out.println("<h3>Email: " + cliente.getEmail() + "</h3>");
+                                out.println("<h3>Dirección: " + cliente.getCiudad() + ", " + cliente.getDepartamento() + ", " + cliente.getDireccion() + "</h3><br>");
+
+                                out.println("<h2>Información del pedido" + "</h2><br>");
+                                out.println("<h3>Tipo de paquete: " + pedido.getTipo() + "</h3>");
+                                out.println("<h3>Dimensiones: " + pedido.getAlto() + "m  *  " + pedido.getAncho() + "m  *  " + pedido.getProfundidad() + "m</h3>");
+                                out.println("<h3>Peso: " + pedido.getPeso() + " g</h2>");
+                                out.println("<h3>Nombre destinatario: " + pedido.getNombreDestinatario() + "</h3>");
+                                out.println("<h3>Teléfono destinatario: +57 " + pedido.getTelefonoDestinatario() + "</h3>");
+                                out.println("<h3>Dirección de entrega: " + pedido.getDireccionDestinatario() + ", " + pedido.getCiudadDestinatario() + ", " + pedido.getDepartamentoDestinatario() + "</h3>");
+                                out.println("<h3>Costo transporte: $" + pedido.getTotalPagar() + "</h3>");
+                                out.println("<h3>Fecha de solicitud: " + pedido.getUltimaFecha().toString() + "</h3><br>");
+
+                                out.println("<h2>Historial" + "</h2><br>");
+
+                                int count = 1;
+                                for (Registro temp : pedido.getRegistroCollection()) {
+                                    out.println("<h3> " + count + ") Estado: '" + temp.getEstado() + "' " + temp.getFecha().toString() + "</h3>");
+                                    out.println("<h3>Tramo: " + temp.getCiudad() + ", " + temp.getDepartamento() + "</h3>");
+                                    out.println("<h3>Descripción: " + temp.getDescripcion() + "</h3><br>");
+                                    count++;
+                                }
+
+                                out.print("<p><a href='ConductorMenu.jsp'>Volver...</a></p>");
+
+                                out.println("</body>");
+                                out.println("</html>");
+
+                                //misession.setAttribute("clienteActual", cliente);
+                            }
+                        }
+                    }
+                } else {
+                    mensaje = "El ID del pedido no se encuentra disponible...";
 
                     //misession.setAttribute("clienteActual", cliente);
                     request.setAttribute("mensaje", mensaje);
-                    request.getRequestDispatcher("ClienteMenu.jsp").forward(request, response);
-                } else {//Actualizar estado
-                    //Long registroid, String ciudad, String departamento, Date fecha, String descripcion, String estado, Pedidos pedidoId
-                    if (ciudad.equals("") || departamento.equals("") || ciudad.equals("Ciudad") || departamento.equals("Departamento")) {
-                        mensaje = "Edite los campos de Cuidad y Departamento antes de continuar...";
-
-                        //misession.setAttribute("clienteActual", cliente);
-                        request.setAttribute("mensaje", mensaje);
-                        request.getRequestDispatcher("ClienteMenu.jsp").forward(request, response);
-                    }
-                    
-                    long count = 0;
-                    for (Registro a : registroFacade.findAll()) {
-                        count++;
-                    }
-
-                    Date date = new Date();
-
-                    Registro registro = new Registro(count + 1, ciudad, departamento, date, "Actualización del conductor", estado, pedido);
-
-                    //Añadir registro a pedido
-                    Collection<Registro> registrosP = pedido.getRegistroCollection();
-                    registrosP.add(registro);
-                    //pedido.setRegistroCollection(registrosP);
-                    pedido.setUltimoEstado(estado);
-                    pedido.setUltimaFecha(date);
-
-                    //Añadir el pedido
-                    pedidosFacade.edit(pedido);
-
-                    //Añadir pedido a cliente
-                    Collection<Pedidos> pedidosC = conductor.getPedidosCollection();
-                    pedidosC.add(pedido);
-                    conductor.setPedidosCollection(pedidosC);
-
-                    conductorFacade.edit(conductor); //Agregamos el pedido
-
-                    mensaje = "El pedido con ID " + idP + " se ha cancelado con éxito...";
-
-                    misessionCon.setAttribute("conductorActual", conductor);
-                    request.setAttribute("mensaje", mensaje);
-                    request.getRequestDispatcher("ClienteMenu.jsp").forward(request, response);
-
-                }
-
-            } else if (action.equals("Ver Información Detallada")) { //Ver info
-                try (PrintWriter out = response.getWriter()) {
-                    /* TODO output your page here. You may use following sample code. */
-                    out.println("<!DOCTYPE html>");
-                    out.println("<html>");
-                    out.println("<head>");
-                    out.println("<title>Servlet UsuarioServlet</title>");
-                    out.println("</head>");
-                    out.println("<body>");
-                    out.println("<h1>INFORMACIÓN DEL PEDIDO " + "</h1><br>");
-
-                    out.println("<h3>Tipo de paquete: " + pedido.getTipo() + "</h3>");
-                    out.println("<h3>Dimensiones: " + pedido.getAlto() + "m  *  " + pedido.getAncho() + "m  *  " + pedido.getProfundidad() + "m</h3>");
-                    out.println("<h3>Peso: " + pedido.getPeso() + " g</h2>");
-                    out.println("<h3>Nombre destinatario: " + pedido.getNombreDestinatario() + "</h3>");
-                    out.println("<h3>Teléfono destinatario: +57 " + pedido.getTelefonoDestinatario() + "</h3>");
-                    out.println("<h3>Dirección de entrega: " + pedido.getDireccionDestinatario() + ", " + pedido.getCiudadDestinatario() + ", " + pedido.getDepartamentoDestinatario() + "</h3>");
-                    out.println("<h3>Costo transporte: $" + pedido.getTotalPagar() + "</h3>");
-                    out.println("<h3>Estado: " + pedido.getUltimoEstado() + "</h3>");
-                    out.println("<h3>Última fecha de actualización: " + pedido.getUltimaFecha().toString() + "</h3><br>");
-
-                    out.println("<h2>Historial" + "</h2><br>");
-
-                    int count = 1;
-                    for (Registro temp : pedido.getRegistroCollection()) {
-                        out.println("<h3> " + count + ") Estado: '" + temp.getEstado() + "' " + temp.getFecha().toString() + "</h3>");
-                        out.println("<h3>Tramo: " + temp.getCiudad() + ", " + temp.getDepartamento() + "</h3>");
-                        out.println("<h3>Descripción: " + temp.getDescripcion() + "</h3><br>");
-                        count++;
-                    }
-
-                    out.print("<p><a href='ClienteMenu.jsp'>Volver...</a></p>");
-
-                    out.println("</body>");
-                    out.println("</html>");
-
-                    //misession.setAttribute("clienteActual", cliente);
+                    request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
                 }
             }
 
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
