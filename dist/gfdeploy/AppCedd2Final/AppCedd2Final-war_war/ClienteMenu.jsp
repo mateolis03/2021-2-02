@@ -4,6 +4,7 @@
     Author     : edwin
 --%>
 
+<%@page import="java.util.ArrayList"%>
 <%@page import="co.edu.unipiloto.utilities.Objetos"%>
 <%@page import="co.edu.unipiloto.entities.Cliente"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -32,6 +33,7 @@
             HttpSession misession;
             Collection<Pedidos> pedidos;
             Objetos myObject;
+            int size, sizeStr;
         %>
 
         <%
@@ -39,6 +41,8 @@
             misession = request.getSession(true);
             user = (Cliente) misession.getAttribute("clienteActual");
             name = user.getNombre();
+            mensaje = "";
+            pedidos = new ArrayList();
             //idS = logH.getCliente().getClienteid() + "";
             idS = user.getClienteid() + "";
 
@@ -52,7 +56,13 @@
 
             //String usuario = request.getParameter("usuario");       
             //pedidos = logH.getCliente().getPedidosCollection();
-            pedidos = user.getPedidosCollection();
+            for (Pedidos x : user.getPedidosCollection()) {
+                if (!x.getUltimoEstado().equals("Cancelado") && !x.getUltimoEstado().equals("Entregado")) {
+                    pedidos.add(x);
+                }
+            }
+            size = pedidos.size();
+            sizeStr = mensaje.length();
             /*myObject = (Objetos )misession.getAttribute("myObject");
             pedidos = myObject.getPedidosAll();*/
         %>
@@ -64,11 +74,13 @@
         <form action="./UsuarioServlet" method="post">
 
 
-            <jsp:useBean id="servUser" scope="application" class="co.edu.unipiloto.servlet.UsuarioServlet" />
+            <jsp:useBean id="servUser" scope="session" class="co.edu.unipiloto.servlet.UsuarioServlet" />
 
 
             <h1>Bienvenid@ Sr(a) <p><%=name%></p></h1>
             <h1>C.C. <%=idS%></h1>
+
+
 
             <nav>
                 <ul>
@@ -80,7 +92,12 @@
             </nav>
             <div id="container">
                 <div id="contentManager">
-                    <p><%=mensaje%></p><br>
+                    <c:set var = "tamS" scope = "session" value = "<%=sizeStr%>"/>
+                    <c:if test="${tamS != 0}">
+                        <p><b>Alerta:</b> <%=mensaje%></p><br>
+                    </c:if>
+
+                    <c:set var = "tam" scope = "session" value = "<%=size%>"/>
 
                     Lista de pedidos <input type="submit" value="Mostrar historial" name="action" /><br><br>
                     <%-- 
@@ -94,26 +111,35 @@
                     <input type="text" name="pedido" value="" placeholder="ID"/> <input type="submit" value="Ver Info Detallada" name="action" /><input type="submit" value="Cancelar Solicitud" name="action" /><br>
                     <p></p>
 
-                    <table border="1">
-                        <th>ID</th>
-                        <th>Tipo Pedido</th>
-                        <th>Estado</th>
-                        <th>Fecha de actualización</th>
+                    <c:choose>
+                        <c:when test="${tam != 0}">
+                            <table border="1">
+                                <th WIDTH="50">ID</th>
+                                <th WIDTH="170">Tipo Pedido</th>
+                                <th WIDTH="120">Estado</th>
+                                <th WIDTH="400">Fecha de actualización</th>
 
-                        <c:forEach items="<%=pedidos%>" var="pedido">
-                            <c:if test="${pedido.ultimoEstado ne 'Cancelado'}">
-                                <c:if test="${pedido.ultimoEstado ne 'Entregado'}">
+                                <c:forEach items="<%=pedidos%>" var="pedido">
+
                                     <tr>
-                                        <td>${pedido.pedidoid}</td>
-                                        <td>${pedido.tipo}</td>
-                                        <td>${pedido.ultimoEstado}</td>
-                                        <td>${pedido.ultimaFecha}</td>
+                                        <td style="text-align: center"><p>${pedido.pedidoid}</p></td>
+                                        <td style="text-align: center"><p>${pedido.tipo}</p></td>
+                                        <td style="text-align: center"><p>${pedido.ultimoEstado}</p></td>
+                                        <td style="text-align: center"><p>${pedido.ultimaFecha}</p></td>
                                     </tr>
-                                </c:if>
 
-                            </c:if>
-                        </c:forEach> 
-                    </table>
+                                </c:forEach> 
+                            </table>
+                        </c:when>    
+                        <c:otherwise>
+                            <br><p>Usted no tiene pedidos en curso</p><br>
+
+                            <p>Puede consultar la información detallada de un pedido pasado con el ID</p>
+                        </c:otherwise>
+                    </c:choose>
+
+
+
                 </div>
             </div>
 

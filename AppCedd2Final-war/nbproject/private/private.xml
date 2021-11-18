@@ -3,15 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/web/HistorialCli.jsp</file>
-            <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/web/LogOut.jsp</file>
-            <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/src/java/co/edu/unipiloto/servlet/ConductorServlet.java</file>
             <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/web/AplicarSolCon.jsp</file>
-            <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/src/java/co/edu/unipiloto/servlet/AplicarSolServlet.java</file>
-            <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/src/java/co/edu/unipiloto/servlet/LogInServlet.java</file>
-            <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/web/ConductorMenu.jsp</file>
             <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/web/ClienteMenu.jsp</file>
-            <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/src/java/co/edu/unipiloto/servlet/UsuarioServlet.java</file>
+            <file>file:/D:/User/Docs/NetBeansProjects/AppCedd2Final/AppCedd2Final-war/web/ConductorMenu.jsp</file>
         </group>
     </open-files>
 </project-private>

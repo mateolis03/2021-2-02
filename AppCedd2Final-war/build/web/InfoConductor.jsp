@@ -57,7 +57,7 @@
     <a><h1>Mi información<p>&nbsp;</p></h1></a>
     <nav>
         <ul>
-            <a href="ConductorMenu.jsp"><li>Atrás</li></a>
+            <a href="PruConductor.jsp"><li>Atrás</li></a>
         </ul>
     </nav>
     <div id="container">

@@ -108,7 +108,7 @@ public class AplicarSolServlet extends HttpServlet {
 
             //misession.setAttribute("clienteActual", cliente);
             request.setAttribute("mensaje", mensaje);
-            request.getRequestDispatcher("AplicarSolCon.jsp").forward(request, response);
+            request.getRequestDispatcher("PruAplicarSolCon.jsp").forward(request, response);
         } else {
             if (pedido != null && pedido.getUltimoEstado().equals("Sin Asignar")) { //Se encontró el id y está sin asignar
 
@@ -153,7 +153,7 @@ public class AplicarSolServlet extends HttpServlet {
                     misessionCon.setAttribute("conductorActual", conductor);
                     misessionCon.setAttribute("myObject", myObject);
                     request.setAttribute("mensaje", mensaje);
-                    request.getRequestDispatcher("AplicarSolCon.jsp").forward(request, response);
+                    request.getRequestDispatcher("PruAplicarSolCon.jsp").forward(request, response);
 
                 } else { //Ver información del pedido
                     try (PrintWriter out = response.getWriter()) {
@@ -195,7 +195,7 @@ public class AplicarSolServlet extends HttpServlet {
                         out.println("<h3>Costo transporte: $" + pedido.getTotalPagar() + "</h3>");
                         out.println("<h3>Fecha de solicitud: " + pedido.getUltimaFecha().toString() + "</h3><br>");
 
-                        out.print("<p><a href='AplicarSolCon.jsp'>Volver...</a></p>");
+                        out.print("<p><a href='PruAplicarSolCon.jsp'>Volver...</a></p>");
 
                         out.println("</body>");
                         out.println("</html>");
@@ -210,7 +210,7 @@ public class AplicarSolServlet extends HttpServlet {
 
                 //misession.setAttribute("clienteActual", cliente);
                 request.setAttribute("mensaje", mensaje);
-                request.getRequestDispatcher("AplicarSolCon.jsp").forward(request, response);
+                request.getRequestDispatcher("PruAplicarSolCon.jsp").forward(request, response);
             }
         }
 

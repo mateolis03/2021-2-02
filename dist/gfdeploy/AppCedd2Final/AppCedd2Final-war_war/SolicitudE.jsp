@@ -25,10 +25,12 @@
             String idS, name, mensaje = "";
             Cliente user;
             HttpSession misession;
+            int sizeStr;
         %>
 
         <%
             misession = request.getSession(true);
+            mensaje = "Digite la información para la solicitud";
             user = (Cliente) misession.getAttribute("clienteActual");
             name = user.getNombre();
             //idS = logH.getCliente().getClienteid() + "";
@@ -43,6 +45,8 @@
 
             }
 
+            sizeStr = mensaje.length();
+
         %>
 
         <nav><a href="ClienteMenu.jsp">&#60; Volver</a></nav>
@@ -56,9 +60,12 @@ String direccionDestinatario,
 
                 --%>
                 <jsp:useBean id="solServlet" scope="application" class="co.edu.unipiloto.servlet.SolEnvServlet" />
-                
-                <p><%=mensaje%></p><br>
-                
+
+                <c:set var = "tamS" scope = "session" value = "<%=sizeStr%>"/>
+                <c:if test="${tamS != 0}">
+                    <p><b>Alerta:</b> <%=mensaje%></p><br>
+                </c:if>
+
                 <label for="fname">Tipo paquete:</label><br>
                 <input type="text" id="fname" name="tipo" placeholder="Ej: Electrodoméstico"><br>
                 <label for="lname">Alto(m):</label><br>
@@ -81,7 +88,7 @@ String direccionDestinatario,
                 <label for="lname">Direccion destinatario</label><br>
                 <input type="text" id="lname" name="direccion" placeholder="Ej: Calle 5 # 3 - 02"><br>	
 
-                
+
 
                 <input type="submit" value="Solicitar envio">
             </form>    		

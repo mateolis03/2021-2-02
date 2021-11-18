@@ -21,25 +21,28 @@
 <body>
     
     <%!
-            String mensaje = "";
-
+            String mensaje = "Ingrese sus datos para el registro";
+            int sizeStr;
         %>
 
         <%
             //logH = (LogInServlet) request.getAttribute("logM");
-
+            mensaje = "Ingrese sus datos para el registro";
             try {
                 if (request.getAttribute("mensaje") != null) {
                     mensaje = String.valueOf(request.getAttribute("mensaje"));
+                    sizeStr = mensaje.length();
+                }else{
+                    sizeStr = 0;
                 }
             } catch (Exception e) {
 
             }
-
+            
         %>
         
     <nav><a href="LogIn.jsp">&#60; Inicio</a></nav>
-    <div id="formContainer">
+    <div id="formContainer" style="text-align: center">
         <h1>Registro</h1>
         <form action="./RegistrarServlet" method="POST">
             <%-- 
@@ -47,6 +50,12 @@
 String telefono, String ciudad, String departamento, String direccion, String usuario, String password)
 --%>
             <jsp:useBean id="servlet" scope="session" class="co.edu.unipiloto.servlet.RegistrarServlet" />
+            
+            <c:set var = "tamS" scope = "session" value = "<%=sizeStr%>"/>
+                <c:if test="${tamS != 0}">
+                    <p><b>Alerta:</b> <%=mensaje%></p><br>
+                </c:if>
+            
             <label for="fname">Nombre completo:</label><br>
             <input type="text" id="fname" name="fname"><br><br>
             <label for="lname">Número de documento:</label><br>
@@ -68,7 +77,6 @@ String telefono, String ciudad, String departamento, String direccion, String us
             <label for="lname">Confirmar Password:</label><br>
             <input type="password" id="lname" name="passwordC"><br><br>
             <input type="submit" value="Registrarse" class="regButton">
-            <p><%=mensaje%></p>
         </form>
     </div>
     <footer>Copyright 2021 Cedd Oz</footer>

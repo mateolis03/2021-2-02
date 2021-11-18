@@ -149,7 +149,7 @@ public class ConductorServlet extends HttpServlet {
 
                 out.println("</table>");
 
-                out.print("<p><a href='ConductorMenu.jsp'>Volver...</a></p>");
+                out.print("<p><a href='PruConductor.jsp'>Volver...</a></p>");
 
                 out.println("</body>");
                 out.println("</html>");
@@ -163,7 +163,7 @@ public class ConductorServlet extends HttpServlet {
 
                 //misession.setAttribute("clienteActual", cliente);
                 request.setAttribute("mensaje", mensaje);
-                request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                request.getRequestDispatcher("PruConductor.jsp").forward(request, response);
             } else {
                 if (pedido != null && !pedido.getUltimoEstado().equals("Sin Asignar")) { //Está el pedido y no está "sin asignar"
 
@@ -181,13 +181,13 @@ public class ConductorServlet extends HttpServlet {
 
                             //misession.setAttribute("clienteActual", cliente);
                             request.setAttribute("mensaje", mensaje);
-                            request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                            request.getRequestDispatcher("PruConductor.jsp").forward(request, response);
                         } else if (pedido.getUltimoEstado().equals("Entregado") || pedido.getUltimoEstado().equals("Cancelado")) { //Si el pedido ya se entregó o canceló
                             mensaje = "El pedido ya ha terminado por lo que su estado no puede editarse...";
 
                             //misession.setAttribute("clienteActual", cliente);
                             request.setAttribute("mensaje", mensaje);
-                            request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                            request.getRequestDispatcher("PruConductor.jsp").forward(request, response);
                         } else {//Actualizar estado
                             //Long registroid, String ciudad, String departamento, Date fecha, String descripcion, String estado, Pedidos pedidoId
                             if (ciudad.equals("") || departamento.equals("") || ciudad.equals("Ciudad") || departamento.equals("Departamento")) {
@@ -195,7 +195,7 @@ public class ConductorServlet extends HttpServlet {
 
                                 //misession.setAttribute("clienteActual", cliente);
                                 request.setAttribute("mensaje", mensaje);
-                                request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                                request.getRequestDispatcher("PruConductor.jsp").forward(request, response);
                             } else {
 
                                 long count = 0;
@@ -223,7 +223,7 @@ public class ConductorServlet extends HttpServlet {
 
                                 misessionCon.setAttribute("conductorActual", conductor);
                                 request.setAttribute("mensaje", mensaje);
-                                request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                                request.getRequestDispatcher("PruConductor.jsp").forward(request, response);
 
                             }
                         }
@@ -242,7 +242,7 @@ public class ConductorServlet extends HttpServlet {
 
                             //misession.setAttribute("clienteActual", cliente);
                             request.setAttribute("mensaje", mensaje);
-                            request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                            request.getRequestDispatcher("PruConductor.jsp").forward(request, response);
                         } else {
                             try (PrintWriter out = response.getWriter()) {
                                 /* TODO output your page here. You may use following sample code. */
@@ -293,7 +293,7 @@ public class ConductorServlet extends HttpServlet {
                                     count++;
                                 }
 
-                                out.print("<p><a href='ConductorMenu.jsp'>Volver...</a></p>");
+                                out.print("<p><a href='PruConductor.jsp'>Volver...</a></p>");
 
                                 out.println("</body>");
                                 out.println("</html>");
@@ -307,7 +307,7 @@ public class ConductorServlet extends HttpServlet {
 
                     //misession.setAttribute("clienteActual", cliente);
                     request.setAttribute("mensaje", mensaje);
-                    request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                    request.getRequestDispatcher("PruConductor.jsp").forward(request, response);
                 }
             }
 

@@ -71,6 +71,7 @@ public class LogInServlet extends HttpServlet {
         allPedidos = pedidosFacade.findAll();
         
         Objetos myObject = new Objetos();
+        HttpSession misession = request.getSession(true);
         myObject = new Objetos(allPedidos, allPedidos.size());
 
         boolean estaC = false;
@@ -84,34 +85,30 @@ public class LogInServlet extends HttpServlet {
                 }
             }
 
-            if (estaC) { //Cliente
-                
-                request.setAttribute("logM", this);
-                HttpSession misessionCli = request.getSession(true);
-                misessionCli.setAttribute("clienteActual", cliente);
-                misessionCli.setAttribute("myObject", myObject);
-                request.getRequestDispatcher("ClienteMenu.jsp").forward(request, response);
-                
-            } else { //Conductor
+            if (!estaC) { //No está el cliente
                 for (Conductor a : conductorFacade.findAll()) {
                     if (a.getUsuario().equals(user) && a.getPassword().equals(pass)) {
                         estaCo = true;
                         conductor = a;
                         request.setAttribute("logM", this);
-                        HttpSession misessionCon = request.getSession(true);
-                        misessionCon.setAttribute("conductorActual", conductor);
-                        misessionCon.setAttribute("myObject", myObject);
-                        request.getRequestDispatcher("ConductorMenu.jsp").forward(request, response);
+                        misession.setAttribute("conductorActual", conductor);
+                        misession.setAttribute("myObject", myObject);
+                        request.getRequestDispatcher("PruConductor.jsp").forward(request, response);
                         break;
                     }
 
-                    if (!estaCo) {
+                    if (!estaCo) { //Si no está el conductor
                         mensaje = "Datos incorrectos, intente de nuevo...";
-                        for(Pedidos x: allPedidos){
-                            mensaje += x.getUltimoEstado();
-                        }
                     }
                 }
+                
+                
+                
+            } else { //Cliente
+                request.setAttribute("logM", this);             
+                misession.setAttribute("clienteActual", cliente);
+                misession.setAttribute("myObject", myObject);
+                request.getRequestDispatcher("ClienteMenu.jsp").forward(request, response);
             }
             request.setAttribute("mensaje", mensaje);
             request.getRequestDispatcher("LogIn.jsp").forward(request, response);

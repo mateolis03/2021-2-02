@@ -182,13 +182,13 @@ public class SolEnvServlet extends HttpServlet {
             
             System.out.println(elegido.getPedidosCollection().size());
             System.out.println(temp.getPedidosCollection().size());*/
-                salida = "Se agregó el pedido satisfactoriamente." + salida;
+                salida = "Solicitud creada con éxito..." + salida;
                 request.setAttribute("mensaje", salida);
                 misession.setAttribute("clienteActual", cliente);
                 request.getRequestDispatcher("SolicitudE.jsp").forward(request, response);
             }
         } else {// Campos nulos
-            salida = "Datos incorrectos. Intente de nuevo";
+            salida = "Datos incorrectos. Intente de nuevo...";
             request.setAttribute("mensaje", salida);
             misession.setAttribute("clienteActual", cliente);
             request.getRequestDispatcher("SolicitudE.jsp").forward(request, response);
